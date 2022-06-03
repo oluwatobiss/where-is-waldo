@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Abel&display=swap");
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  background-color: black;
+}
+
+a {
+  font-family: "Abel", sans-serif;
+  text-decoration: none;
+  color: white;
+}
+
+a:hover {
+  color: tan;
+}
