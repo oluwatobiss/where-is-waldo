@@ -1,0 +1,13 @@
+main {
+  background-color: black;
+}
+
+path {
+  stroke: red;
+  stroke-width: 0;
+  fill: rgba(255, 255, 255, 0);
+}
+
+g {
+  visibility: hidden;
+}
