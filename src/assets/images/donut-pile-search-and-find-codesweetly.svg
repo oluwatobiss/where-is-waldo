@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="100%" height="100%" viewBox="0 0 1500 1088" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;">
-    <image id="_Image1" width="1500px" height="1088px" xlink:href="https://cdna.artstation.com/p/assets/images/images/035/547/472/large/rory-adams-blueberrybamf-donut-pile-colored.jpg?1615253622"/>
+    <image id="donut-pile-search-and-find" class="search-and-find-image" width="1500px" height="1088px" xlink:href="https://cdna.artstation.com/p/assets/images/images/035/547/472/large/rory-adams-blueberrybamf-donut-pile-colored.jpg?1615253622"/>
     <path id="carrot-outline" d="M1450.01,345.748L1426.98,305.859C1426.98,305.859 1424.77,300.592 1429.66,302.883L1456.66,327.805L1463.16,336.907L1464.46,338.579C1464.46,338.579 1472.38,344.59 1474.31,347.116C1474.31,347.116 1478.77,354.843 1479.27,356.032C1479.27,356.032 1480.85,360.837 1479.57,361.233C1479.57,361.233 1477.83,361.927 1476.99,361.382C1476.99,361.382 1475.6,364.924 1471.74,364.032L1467.48,359.921L1457.72,348.528L1455.64,347.19L1450.01,345.748Z"/>
     <g transform="matrix(1,0,0,1,758.434,-71.9625)">
         <text id="carrot-found" x="654.795px" y="420.229px" style="font-family:'SegoeUIEmoji', 'Segoe UI Emoji', sans-serif;font-size:58.333px;fill:rgb(0,128,0);stroke:white;stroke-width:1px;stroke-linecap:butt;stroke-miterlimit:2;"><title>Carrot found!</title>✔</text>
