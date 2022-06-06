@@ -1,9 +1,19 @@
+import { useEffect } from "react";
 import Header from "./Header";
 import Body from "./Body";
 import Footer from "./Footer";
 import "../styles/Apps.css";
 
 function App() {
+  function handleKeydown(e) {
+    const contextMenu = document.getElementById("context-menu");
+    const contextMenuIsActive = [...contextMenu.classList].includes("visible");
+
+    if (e.key === "Escape" && contextMenuIsActive) {
+      contextMenu.classList.remove("visible");
+    }
+  }
+
   function handleMouseDown(e) {
     const contextMenu = document.getElementById("context-menu");
     const contextMenuIsActive = [...contextMenu.classList].includes("visible");
@@ -25,6 +35,14 @@ function App() {
       contextMenu.classList.remove("visible");
     }
   }
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeydown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeydown);
+    };
+  }, []);
 
   return (
     <div className="App" onMouseDown={handleMouseDown}>
