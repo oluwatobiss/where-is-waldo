@@ -4,11 +4,13 @@
   width: 200px;
   background-color: #1b1a1a;
   border-radius: 5px;
-  display: none;
+  transform: scale(0);
+  transform-origin: top left;
 }
 
 #context-menu.visible {
-  display: block;
+  transform: scale(1);
+  transition: 200ms ease-in-out;
 }
 
 #context-menu .context-menu-item {

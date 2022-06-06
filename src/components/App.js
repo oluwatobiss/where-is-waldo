@@ -28,7 +28,11 @@ function App() {
       contextMenu.style.left = `${mouseXPosition}px`;
       contextMenu.style.top = `${mouseYPosition}px`;
 
-      contextMenu.classList.add("visible");
+      contextMenuIsActive && contextMenu.classList.remove("visible");
+
+      setTimeout(() => {
+        contextMenu.classList.add("visible");
+      });
     }
 
     if (isLeftMouseDown && !isSearchAndFindImage && contextMenuIsActive) {
