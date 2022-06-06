@@ -12,9 +12,6 @@ function App() {
       "search-and-find-image"
     );
 
-    console.log(e.target.classList);
-    console.log(isSearchAndFindImage);
-
     if (isLeftMouseDown && isSearchAndFindImage) {
       const { clientX: mouseXPosition, clientY: mouseYPosition } = e;
 
