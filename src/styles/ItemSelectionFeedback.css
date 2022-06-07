@@ -1,0 +1,16 @@
+#feedback {
+  position: fixed;
+  z-index: 10000;
+  margin-top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fdeded;
+  border-radius: 5px;
+  padding: 17px;
+  color: #5f2120;
+  text-align: center;
+  font-size: 1.2rem;
+  display: none;
+  /* transform: scale(0);
+      transform-origin: top left; */
+}

@@ -15,7 +15,9 @@ function ContextMenu() {
   return (
     <div id="context-menu">
       <div id="close-context-menu-div">
-        <span id="close-context-menu-span">❌</span>
+        <span id="close-context-menu-span" title="Close">
+          ❌
+        </span>
       </div>
       {contextMenuItems}
     </div>

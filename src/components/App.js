@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+
 import LeaderboardModal from "./LeaderboardModal";
 import CongratsModal from "./CongratsModal";
 import OopsModal from "./OopsModal";

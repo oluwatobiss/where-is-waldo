@@ -16,7 +16,9 @@ function OopsModal() {
   return (
     <div id="congrats-modal">
       <form id="congrats-form" onSubmit={handleSubmit}>
-        <span id="close-congrats-form">❌</span>
+        <span id="close-congrats-form" title="Close">
+          ❌
+        </span>
         <h1>Congratulations🎉</h1>
         <p className="modal-info">You made the top 10!</p>
         <input
