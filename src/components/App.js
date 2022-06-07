@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import OopsModal from "./OopsModal";
 import Header from "./Header";
 import Body from "./Body";
 import Footer from "./Footer";
@@ -34,11 +35,11 @@ function App() {
     let contextMenuTopPosition = mouseYViewportPosition;
 
     if (contextMenuIsOutOfXView) {
-      // Subtract the mouse's X position from the viewport's width to get portion of the context-menu within the viewport:
+      // Subtract the mouse's X position from the viewport's width to get the context-menu's portion that is within the viewport:
       const sizeOfContextMenuWithinXViewport =
         window.innerWidth - mouseXViewportPosition;
 
-      // Subtract the sizeOfContextMenuWithinXViewport from the context-menu's width to get the portion of the context-menu outside the viewport:
+      // Subtract the sizeOfContextMenuWithinXViewport from the context-menu's width to get the context-menu's portion that is outside the viewport:
       const sizeOfContextMenuOutOfXViewport =
         contextMenu.clientWidth - sizeOfContextMenuWithinXViewport;
 
@@ -49,11 +50,11 @@ function App() {
     }
 
     if (contextMenuIsOutOfYView) {
-      // Subtract the mouse's Y position from the viewport's height to get portion of the context-menu within the viewport:
+      // Subtract the mouse's Y position from the viewport's height to get the context-menu's portion that is within the viewport:
       const sizeOfContextMenuWithinYViewport =
         window.innerHeight - mouseYViewportPosition;
 
-      // Subtract the sizeOfContextMenuWithinYViewport from the context-menu's height to get the portion of the context-menu outside the viewport:
+      // Subtract the sizeOfContextMenuWithinYViewport from the context-menu's height to get the context-menu's portion that is outside the viewport:
       const sizeOfContextMenuOutOfYViewport =
         contextMenu.clientHeight - sizeOfContextMenuWithinYViewport;
 
@@ -72,18 +73,6 @@ function App() {
     const isSearchAndFindImage = [...e.target.classList].includes(
       "search-and-find-image"
     );
-
-    // console.log({
-    //   clientY: e.clientY,
-    //   pageY: e.pageY,
-    //   screenY: e.screenY,
-    //   offsetY: e.offsetY,
-    // });
-
-    // console.log({
-    //   viewportHeight: window.innerHeight,
-    //   contextMenuHeight: contextMenu.clientHeight,
-    // });
 
     if (isLeftMouseDown && isSearchAndFindImage) {
       // Get mouse's position relative to the viewport:
@@ -119,6 +108,7 @@ function App() {
 
   return (
     <div className="App" onMouseDown={handleMouseDown}>
+      <OopsModal />
       <Header />
       <Body />
       <Footer />
