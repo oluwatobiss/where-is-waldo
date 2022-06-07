@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import LeaderboardModal from "./LeaderboardModal";
 import CongratsModal from "./CongratsModal";
 import OopsModal from "./OopsModal";
 import Header from "./Header";
@@ -109,6 +110,7 @@ function App() {
 
   return (
     <div className="App" onMouseDown={handleMouseDown}>
+      <LeaderboardModal />
       <CongratsModal />
       <OopsModal />
       <Header />
