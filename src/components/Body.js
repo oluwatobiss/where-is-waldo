@@ -15,7 +15,7 @@ function Body() {
   }
 
   return (
-    <main onContextMenu={handleContextMenu}>
+    <main id="main" onContextMenu={handleContextMenu}>
       <ContextMenu />
       <DonutPileImage />
     </main>

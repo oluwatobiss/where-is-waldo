@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Abel&display=swap");
 
 .App {
-  height: 100%;
+  height: fit-content;
   display: grid;
   grid-template-rows: 70px 1fr 5%;
   font-family: "Abel", sans-serif;
