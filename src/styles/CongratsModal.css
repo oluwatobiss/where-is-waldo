@@ -1,4 +1,4 @@
-#oops-modal {
+#congrats-modal {
   position: fixed;
   z-index: 10000;
   width: 100%;
@@ -10,10 +10,10 @@
   text-align: center;
   display: none;
   /* transform: scale(0);
-    transform-origin: top left; */
+      transform-origin: top left; */
 }
 
-#oops-modal-content {
+#congrats-form {
   background-color: #1b1a1a;
   margin: 15% auto;
   padding: 20px;
@@ -21,11 +21,11 @@
   width: 30%;
 }
 
-#close-oops-modal-span {
+#close-congrats-form {
   float: right;
 }
 
-#close-oops-modal-span:hover {
+#close-congrats-form:hover {
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.17);
   cursor: pointer;
@@ -37,10 +37,16 @@ h1 {
 
 .modal-info {
   font-size: 1.3rem;
-  padding: 10px 0 5px;
+  padding: 10px 0 8px;
 }
 
-#see-board:hover {
-  color: tan;
-  cursor: pointer;
+#congrats-form input {
+  width: 75%;
+  padding: 10px 20px;
+  font-size: 1rem;
+  text-align: center;
+}
+
+#congrats-form input:focus {
+  outline: none;
 }

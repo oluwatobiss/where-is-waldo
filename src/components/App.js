@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import CongratsModal from "./CongratsModal";
 import OopsModal from "./OopsModal";
 import Header from "./Header";
 import Body from "./Body";
@@ -108,6 +109,7 @@ function App() {
 
   return (
     <div className="App" onMouseDown={handleMouseDown}>
+      <CongratsModal />
       <OopsModal />
       <Header />
       <Body />
