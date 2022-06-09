@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-
+import { useState, useEffect } from "react";
+import ItemSelectionFeedback from "./ItemSelectionFeedback";
 import LeaderboardModal from "./LeaderboardModal";
 import CongratsModal from "./CongratsModal";
 import OopsModal from "./OopsModal";
@@ -8,7 +8,15 @@ import Body from "./Body";
 import Footer from "./Footer";
 import "../styles/Apps.css";
 
+let previousTimeout = null;
+
 function App() {
+  const [itemFound, setItemFound] = useState(null);
+  const [clickedContextMenuItem, setClickedContextMenuItem] = useState(null);
+
+  let clickedBodyItemName = null;
+  let clickedContextMenuItemName = null;
+
   function handleKeydown(e) {
     const contextMenu = document.getElementById("context-menu");
     const contextMenuIsActive = [...contextMenu.classList].includes("visible");
@@ -70,12 +78,61 @@ function App() {
   }
 
   function handleMouseDown(e) {
+    let isContextMenuItem = false;
     const contextMenu = document.getElementById("context-menu");
+    const itemSelectionFeedback = document.getElementById(
+      "item-selection-feedback"
+    );
     const contextMenuIsActive = [...contextMenu.classList].includes("visible");
     const isLeftMouseDown = e.button === 0;
+    const isContextMenu = e.target.getAttribute("id") === "context-menu";
     const isSearchAndFindImage = [...e.target.classList].includes(
       "search-and-find-image"
     );
+
+    if (isSearchAndFindImage) {
+      console.log(clickedContextMenuItemName);
+      clickedBodyItemName = e.target.getAttribute("data-item-name");
+      console.log(clickedBodyItemName);
+    }
+
+    if (e.target.closest(".clickable-context")) {
+      isContextMenuItem = [
+        ...e.target.closest(".clickable-context").classList,
+      ].includes("context-menu-item");
+    }
+
+    if (isContextMenuItem) {
+      console.log(clickedBodyItemName);
+      clickedContextMenuItemName = e.target
+        .closest(".clickable-context")
+        .getAttribute("data-menu-item-name");
+
+      console.log(clickedContextMenuItemName);
+
+      if (clickedContextMenuItemName === clickedBodyItemName) {
+        clearTimeout(previousTimeout);
+        setItemFound(true);
+        setClickedContextMenuItem(clickedContextMenuItemName);
+        itemSelectionFeedback.classList.remove("item-not-found-feedback");
+        itemSelectionFeedback.classList.add("visible", "item-found-feedback");
+        previousTimeout = setTimeout(() => {
+          itemSelectionFeedback.classList.remove("visible");
+        }, 5000);
+      } else {
+        clearTimeout(previousTimeout);
+        setItemFound(false);
+        setClickedContextMenuItem(clickedContextMenuItemName);
+        itemSelectionFeedback.classList.remove("item-found-feedback");
+        itemSelectionFeedback.classList.add(
+          "visible",
+          "item-not-found-feedback"
+        );
+        previousTimeout = setTimeout(() => {
+          itemSelectionFeedback.classList.remove("visible");
+        }, 5000);
+      }
+    }
 
     if (isLeftMouseDown && isSearchAndFindImage) {
       // Get mouse's position relative to the viewport:
@@ -83,20 +140,35 @@ function App() {
         clientX: mouseXViewportPosition,
         clientY: mouseYViewportPosition,
       } = e;
+
+      // Define context menu's left and top positions:
       const { contextMenuLeftPosition, contextMenuTopPosition } =
         setContextMenuPosition(mouseXViewportPosition, mouseYViewportPosition);
 
+      // Move context menu to its left and top positions:
       contextMenu.style.left = `${contextMenuLeftPosition}px`;
       contextMenu.style.top = `${contextMenuTopPosition}px`;
 
+      // Remove 'visible' class from the previously active context menu:
       contextMenuIsActive && contextMenu.classList.remove("visible");
 
+      // Add 'visible' class to context menu to show it at its new position:
+      // Note: setTimeout() makes the CSS transition effective. It prevents remove("visible")
+      // and add("visible") from occurring in the same event loop. So, add("visible") happens
+      // some moment after remove("visible").
+      // Learn more: mikechambers.com/blog/2011/07/20/timing-issues-when-animating-with-css3-transitions
+      // Learn more: youtube.com/watch?v=cCOL7MC4Pl0
       setTimeout(() => {
         contextMenu.classList.add("visible");
       });
     }
 
-    if (isLeftMouseDown && !isSearchAndFindImage && contextMenuIsActive) {
+    if (
+      isLeftMouseDown &&
+      !isSearchAndFindImage &&
+      contextMenuIsActive &&
+      !isContextMenu
+    ) {
       contextMenu.classList.remove("visible");
     }
   }
@@ -111,6 +183,10 @@ function App() {
 
   return (
     <div className="App" onMouseDown={handleMouseDown}>
+      <ItemSelectionFeedback
+        itemFound={itemFound}
+        clickedContextMenuItem={clickedContextMenuItem}
+      />
       <LeaderboardModal />
       <CongratsModal />
       <OopsModal />

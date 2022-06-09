@@ -1,5 +1,4 @@
 import { ReactComponent as DonutPileImage } from "../assets/images/donut-pile-search-and-find-codesweetly.svg";
-import ItemSelectionFeedback from "./ItemSelectionFeedback";
 import ContextMenu from "./ContextMenu";
 import "../styles/Body.css";
 
@@ -17,7 +16,6 @@ function Body() {
 
   return (
     <main id="main" onContextMenu={handleContextMenu}>
-      <ItemSelectionFeedback />
       <ContextMenu />
       <DonutPileImage />
     </main>

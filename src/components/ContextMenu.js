@@ -4,7 +4,11 @@ import itemsToFind from "../itemsToFind";
 
 const contextMenuItems = itemsToFind.map((i) => {
   return (
-    <div className="context-menu-item" key={uniqid()}>
+    <div
+      className="context-menu-item clickable-context"
+      data-menu-item-name={i.name}
+      key={uniqid()}
+    >
       <img alt={i.name} src={require(`../assets/images/${i.fileName}`)} />
       <span>{i.name}</span>
     </div>
@@ -14,12 +18,14 @@ const contextMenuItems = itemsToFind.map((i) => {
 function ContextMenu() {
   return (
     <div id="context-menu">
-      <div id="close-context-menu-div">
-        <span id="close-context-menu-span" title="Close">
-          ❌
-        </span>
-      </div>
-      {contextMenuItems}
+      <span
+        id="close-context-menu-span"
+        className="clickable-context"
+        title="Close"
+      >
+        ❌
+      </span>
+      <div id="context-menu-items-div">{contextMenuItems}</div>
     </div>
   );
 }
