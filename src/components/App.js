@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import itemsToFind from "../itemsToFind";
 import ItemSelectionFeedback from "./ItemSelectionFeedback";
 import LeaderboardModal from "./LeaderboardModal";
 import CongratsModal from "./CongratsModal";
@@ -11,6 +12,7 @@ import "../styles/Apps.css";
 let previousTimeout = null;
 
 function App() {
+  const [totalItems, setTotalItems] = useState(itemsToFind.length);
   const [itemFound, setItemFound] = useState(null);
   const [clickedContextMenuItem, setClickedContextMenuItem] = useState(null);
 
@@ -114,6 +116,7 @@ function App() {
         clearTimeout(previousTimeout);
         setItemFound(true);
         setClickedContextMenuItem(clickedContextMenuItemName);
+        setTotalItems(totalItems - 1);
         itemSelectionFeedback.classList.remove("item-not-found-feedback");
         itemSelectionFeedback.classList.add("visible", "item-found-feedback");
         previousTimeout = setTimeout(() => {
@@ -239,6 +242,10 @@ function App() {
       document.removeEventListener("keydown", handleKeydown);
     };
   }, []);
+
+  useEffect(() => {
+    totalItems === 0 && console.log("All items found!");
+  }, [totalItems]);
 
   return (
     <div className="App" onMouseDown={handleMouseDown}>
