@@ -2,6 +2,10 @@ main {
   background-color: black;
 }
 
+svg {
+  margin-top: 70px;
+}
+
 path {
   stroke: red;
   stroke-width: 0;
