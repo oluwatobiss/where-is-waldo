@@ -3,8 +3,11 @@ import uniqid from "uniqid";
 import itemsToFind from "../itemsToFind";
 
 const searchItemsImages = itemsToFind.map((i) => {
+  const headerItemToFindId = i.name.toLowerCase().replace(/\s/g, "-");
+  console.log(`header-${headerItemToFindId}`);
   return (
     <img
+      id={`header-${headerItemToFindId}`}
       key={uniqid()}
       alt={i.name}
       title={i.name}
