@@ -119,6 +119,33 @@ function App() {
         previousTimeout = setTimeout(() => {
           itemSelectionFeedback.classList.remove("visible");
         }, 5000);
+
+        switch (clickedContextMenuItemName) {
+          case "Carrot":
+            document.getElementById("carrot-found").classList.add("visible");
+            break;
+          case "Pack of fries":
+            document
+              .getElementById("pack-of-fries-found")
+              .classList.add("visible");
+            break;
+          case "Hamburger":
+            document.getElementById("hamburger-found").classList.add("visible");
+            break;
+          case "American football":
+            document
+              .getElementById("american-football-found")
+              .classList.add("visible");
+            break;
+          case "Pizza":
+            document.getElementById("pizza-found").classList.add("visible");
+            break;
+          case "Pineapple":
+            document.getElementById("pineapple-found").classList.add("visible");
+            break;
+          default:
+            console.error("Selected context item not marked in SVG.");
+        }
       } else {
         clearTimeout(previousTimeout);
         setItemFound(false);

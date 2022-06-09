@@ -8,6 +8,10 @@ path {
   fill: rgba(255, 255, 255, 0);
 }
 
-g {
-  visibility: hidden;
+text {
+  display: none;
+}
+
+text.visible {
+  display: block;
 }
