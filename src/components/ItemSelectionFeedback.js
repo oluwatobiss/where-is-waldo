@@ -1,7 +1,7 @@
 import "../styles/ItemSelectionFeedback.css";
 
 function ItemSelectionFeedback(props) {
-  console.log(props);
+  // console.log(props);
   let messageToDisplay = "";
 
   if (props.itemFound === true) {

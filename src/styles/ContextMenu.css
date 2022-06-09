@@ -16,6 +16,7 @@
 #close-context-menu-span {
   float: right;
   padding: 7px 7px 0;
+  cursor: pointer;
 }
 
 #context-menu-items-div {

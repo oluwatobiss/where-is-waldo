@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useStopwatch } from "react-timer-hook";
 import itemsToFind from "../itemsToFind";
 import ItemSelectionFeedback from "./ItemSelectionFeedback";
 import LeaderboardModal from "./LeaderboardModal";
@@ -10,14 +11,16 @@ import Footer from "./Footer";
 import "../styles/Apps.css";
 
 let previousTimeout = null;
+let clickedBodyItemName = null;
+let clickedContextMenuItemName = null;
 
 function App() {
   const [totalItems, setTotalItems] = useState(itemsToFind.length);
   const [itemFound, setItemFound] = useState(null);
   const [clickedContextMenuItem, setClickedContextMenuItem] = useState(null);
-
-  let clickedBodyItemName = null;
-  let clickedContextMenuItemName = null;
+  const { seconds, minutes, hours, start, pause, reset } = useStopwatch({
+    autoStart: true,
+  });
 
   function handleKeydown(e) {
     const contextMenu = document.getElementById("context-menu");
@@ -244,8 +247,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    totalItems === 0 && console.log("All items found!");
-  }, [totalItems]);
+    if (totalItems === 0) {
+      pause();
+      console.log(`All items found in ${hours}:${minutes}:${seconds}`);
+    }
+  }, [totalItems, pause]);
 
   return (
     <div className="App" onMouseDown={handleMouseDown}>
@@ -256,7 +262,7 @@ function App() {
       <LeaderboardModal />
       <CongratsModal />
       <OopsModal />
-      <Header />
+      <Header hours={hours} minutes={minutes} seconds={seconds} />
       <Body />
       <Footer />
     </div>
