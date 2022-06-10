@@ -16,12 +16,16 @@ let clickedContextMenuItem = null;
 let totalItems = itemsToFind.length;
 
 const dummyRecord = [
-  { rank: 1, name: "Tobi", time: "0:0:2", date: "2022-06-09" },
-  { rank: 2, name: "Dav", time: "0:0:7", date: "2022-05-21" },
-  { rank: 3, name: "Mary", time: "0:1:34", date: "2021-03-17" },
-  { rank: 4, name: "Jerry", time: "0:1:56", date: "2022-01-01" },
-  { rank: 5, name: "Abel", time: "0:3:0", date: "2020-10-10" },
-  { rank: 6, name: "Sarah", time: "0:3:21", date: "2020-10-10" },
+  { rank: 1, name: "Tobi", time: "0:0:15", date: "2022-06-09" },
+  { rank: 2, name: "Dav", time: "0:0:20", date: "2022-05-21" },
+  { rank: 3, name: "Mary", time: "0:0:25", date: "2021-03-17" },
+  { rank: 4, name: "Jerry", time: "0:0:30", date: "2022-01-01" },
+  { rank: 5, name: "Abel", time: "0:0:35", date: "2020-10-10" },
+  { rank: 6, name: "Sarah", time: "0:0:40", date: "2020-10-10" },
+  { rank: 7, name: "Mary", time: "0:0:45", date: "2021-03-17" },
+  { rank: 8, name: "Jerry", time: "0:0:50", date: "2022-01-01" },
+  { rank: 9, name: "Abel", time: "0:0:55", date: "2020-10-10" },
+  { rank: 10, name: "Sarah", time: "0:1:0", date: "2020-10-10" },
 ];
 
 function App() {
@@ -202,37 +206,81 @@ function App() {
 
         if (totalItems === 0) {
           pause();
-          const stoppedTime = Number(`${hours}${minutes}${seconds}`);
-          let editLearderboard = true;
+          const stoppedTime = Number(`${hours}0${minutes}0${seconds}`);
+          const lastLeaderboardTime = dummyRecord[dummyRecord.length - 1]
+            ? Number(
+                dummyRecord[dummyRecord.length - 1].time.replace(/:/g, "0")
+              )
+            : 0;
 
-          for (let i = 0; i < dummyRecord.length; i++) {
-            console.log({ endTime: `${hours}${minutes}${seconds}` });
-            console.log({
-              [dummyRecord[i].name]: dummyRecord[i].time.replace(/:/g, ""),
-            });
+          console.log({
+            stoppedTime: stoppedTime,
+            lastLeaderboardTime: lastLeaderboardTime,
+          });
 
-            if (editLearderboard) {
-              const newRecord = {
-                rank: i + 1,
-                name: "New Name",
-                time: `${hours}:${minutes}:${seconds}`,
-                date: new Date().toLocaleDateString(undefined, {
-                  weekday: "long",
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                }),
-              };
+          if (stoppedTime < lastLeaderboardTime || dummyRecord.length < 10) {
+            let editLearderboard = true;
+            const newRecord = {
+              name: "New Name",
+              time: `${hours}:${minutes}:${seconds}`,
+              date: new Date().toLocaleDateString(undefined, {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              }),
+            };
 
-              if (stoppedTime < Number(dummyRecord[i].time.replace(/:/g, ""))) {
-                if (i === 0) {
-                  dummyRecord.unshift(newRecord);
-                  console.log(dummyRecord);
-                } else {
-                  dummyRecord.splice(i, 0, newRecord);
+            if (dummyRecord.length === 0) {
+              dummyRecord.push(newRecord);
+              editLearderboard = false;
+              console.log(dummyRecord);
+            }
+
+            for (let i = 0; i < dummyRecord.length; i++) {
+              if (editLearderboard) {
+                console.log({ endTime: `${hours}${minutes}${seconds}` });
+                console.log({
+                  [dummyRecord[i].name]: dummyRecord[i].time.replace(/:/g, "0"),
+                });
+
+                if (
+                  stoppedTime < Number(dummyRecord[i].time.replace(/:/g, "0"))
+                ) {
+                  if (i === 0 && dummyRecord.length < 10) {
+                    dummyRecord.unshift(newRecord);
+                    console.log(dummyRecord);
+                  } else if (i === 0 && dummyRecord.length === 10) {
+                    dummyRecord.unshift(newRecord);
+                    dummyRecord.pop();
+                    console.log(dummyRecord);
+                  } else if (i < 9 && dummyRecord.length < 10) {
+                    dummyRecord.splice(i, 0, newRecord);
+                    console.log(dummyRecord);
+                  } else if (i < 9 && dummyRecord.length === 10) {
+                    dummyRecord.splice(i, 0, newRecord);
+                    dummyRecord.pop();
+                    console.log(dummyRecord);
+                  } else if (i === 9) {
+                    dummyRecord.splice(i, 1, newRecord);
+                    console.log(dummyRecord);
+                  } else {
+                    console.error({
+                      currentLoop: i,
+                      leaderBoardlength: dummyRecord.length,
+                    });
+                  }
+                  editLearderboard = false;
+                } else if (
+                  i === dummyRecord.length - 1 &&
+                  stoppedTime >= Number(dummyRecord[i].time.replace(/:/g, "0"))
+                ) {
+                  // If the loop is at the last record in the leaderboard and the user's time is equal
+                  // to or greater than the record, add the user's time to the end of the leaderboard:
+                  dummyRecord.push(newRecord);
+                  editLearderboard = false;
                   console.log(dummyRecord);
                 }
-                editLearderboard = false;
               }
             }
           }

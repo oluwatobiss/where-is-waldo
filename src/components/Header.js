@@ -4,7 +4,6 @@ import "../styles/Header.css";
 
 const searchItemsImages = itemsToFind.map((i) => {
   const headerItemToFindId = i.name.toLowerCase().replace(/\s/g, "-");
-  console.log(`header-${headerItemToFindId}`);
   return (
     <img
       id={`header-${headerItemToFindId}`}

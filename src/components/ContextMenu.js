@@ -12,7 +12,6 @@ const contextMenuItems = itemsToFind.map((i) => {
       data-menu-item-name={i.name}
       key={uniqid()}
     >
-      {console.log(`context-menu-${contextMenuItemId}`)}
       <img alt={i.name} src={require(`../assets/images/${i.fileName}`)} />
       <span>{i.name}</span>
     </div>
