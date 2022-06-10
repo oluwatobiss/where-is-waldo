@@ -12,12 +12,24 @@ import "../styles/Apps.css";
 
 let previousTimeout = null;
 let clickedBodyItemName = null;
-let clickedContextMenuItemName = null;
+let clickedContextMenuItem = null;
+let totalItems = itemsToFind.length;
+
+const dummyRecord = [
+  { rank: 1, name: "Tobi", time: "0:0:2", date: "2022-06-09" },
+  { rank: 2, name: "Dav", time: "0:0:7", date: "2022-05-21" },
+  { rank: 3, name: "Mary", time: "0:1:34", date: "2021-03-17" },
+  { rank: 4, name: "Jerry", time: "0:1:56", date: "2022-01-01" },
+  { rank: 5, name: "Abel", time: "0:3:0", date: "2020-10-10" },
+  { rank: 6, name: "Sarah", time: "0:3:21", date: "2020-10-10" },
+];
 
 function App() {
-  const [totalItems, setTotalItems] = useState(itemsToFind.length);
-  const [itemFound, setItemFound] = useState(null);
-  const [clickedContextMenuItem, setClickedContextMenuItem] = useState(null);
+  const [clickedMenuItemInfo, setClickedMenuItemInfo] = useState({
+    itemFound: null,
+    clickedContextMenuItem: null,
+  });
+
   const { seconds, minutes, hours, start, pause, reset } = useStopwatch({
     autoStart: true,
   });
@@ -96,7 +108,7 @@ function App() {
     );
 
     if (isSearchAndFindImage) {
-      console.log(clickedContextMenuItemName);
+      console.log(clickedContextMenuItem);
       clickedBodyItemName = e.target.getAttribute("data-item-name");
       console.log(clickedBodyItemName);
     }
@@ -109,24 +121,27 @@ function App() {
 
     if (isContextMenuItem) {
       console.log(clickedBodyItemName);
-      clickedContextMenuItemName = e.target
+      clickedContextMenuItem = e.target
         .closest(".clickable-context")
         .getAttribute("data-menu-item-name");
 
-      console.log(clickedContextMenuItemName);
+      console.log(clickedContextMenuItem);
 
-      if (clickedContextMenuItemName === clickedBodyItemName) {
+      if (clickedContextMenuItem === clickedBodyItemName) {
         clearTimeout(previousTimeout);
-        setItemFound(true);
-        setClickedContextMenuItem(clickedContextMenuItemName);
-        setTotalItems(totalItems - 1);
+        setClickedMenuItemInfo({
+          itemFound: true,
+          clickedContextMenuItem: clickedContextMenuItem,
+        });
+
+        totalItems -= 1;
         itemSelectionFeedback.classList.remove("item-not-found-feedback");
         itemSelectionFeedback.classList.add("visible", "item-found-feedback");
         previousTimeout = setTimeout(() => {
           itemSelectionFeedback.classList.remove("visible");
         }, 5000);
 
-        switch (clickedContextMenuItemName) {
+        switch (clickedContextMenuItem) {
           case "Carrot":
             document.getElementById("carrot-found").classList.add("visible");
             document.getElementById("header-carrot").classList.add("invisible");
@@ -184,10 +199,52 @@ function App() {
           default:
             console.error("Selected context item not marked in SVG.");
         }
+
+        if (totalItems === 0) {
+          pause();
+          const stoppedTime = Number(`${hours}${minutes}${seconds}`);
+          let editLearderboard = true;
+
+          for (let i = 0; i < dummyRecord.length; i++) {
+            console.log({ endTime: `${hours}${minutes}${seconds}` });
+            console.log({
+              [dummyRecord[i].name]: dummyRecord[i].time.replace(/:/g, ""),
+            });
+
+            if (editLearderboard) {
+              const newRecord = {
+                rank: i + 1,
+                name: "New Name",
+                time: `${hours}:${minutes}:${seconds}`,
+                date: new Date().toLocaleDateString(undefined, {
+                  weekday: "long",
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                }),
+              };
+
+              if (stoppedTime < Number(dummyRecord[i].time.replace(/:/g, ""))) {
+                if (i === 0) {
+                  dummyRecord.unshift(newRecord);
+                  console.log(dummyRecord);
+                } else {
+                  dummyRecord.splice(i, 0, newRecord);
+                  console.log(dummyRecord);
+                }
+                editLearderboard = false;
+              }
+            }
+          }
+          console.log(`All items found in ${hours}:${minutes}:${seconds}`);
+        }
       } else {
         clearTimeout(previousTimeout);
-        setItemFound(false);
-        setClickedContextMenuItem(clickedContextMenuItemName);
+        setClickedMenuItemInfo({
+          itemFound: false,
+          clickedContextMenuItem: clickedContextMenuItem,
+        });
+
         itemSelectionFeedback.classList.remove("item-found-feedback");
         itemSelectionFeedback.classList.add(
           "visible",
@@ -246,19 +303,9 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {
-    if (totalItems === 0) {
-      pause();
-      console.log(`All items found in ${hours}:${minutes}:${seconds}`);
-    }
-  }, [totalItems, pause]);
-
   return (
     <div className="App" onMouseDown={handleMouseDown}>
-      <ItemSelectionFeedback
-        itemFound={itemFound}
-        clickedContextMenuItem={clickedContextMenuItem}
-      />
+      <ItemSelectionFeedback clickedMenuItemInfo={clickedMenuItemInfo} />
       <LeaderboardModal />
       <CongratsModal />
       <OopsModal />
