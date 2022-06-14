@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useStopwatch } from "react-timer-hook";
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "../firebase-config";
 import itemsToFind from "../itemsToFind";
 import ItemSelectionFeedback from "./ItemSelectionFeedback";
 import LeaderboardModal from "./LeaderboardModal";
@@ -9,12 +11,26 @@ import Header from "./Header";
 import Body from "./Body";
 import Footer from "./Footer";
 import "../styles/Apps.css";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  limit,
+  onSnapshot,
+  setDoc,
+  updateDoc,
+  doc,
+  serverTimestamp,
+} from "firebase/firestore";
 
 let previousTimeout = null;
 let clickedBodyItemName = null;
 let clickedContextMenuItem = null;
 let totalItems = itemsToFind.length;
 
+const app = initializeApp(firebaseConfig);
 const dummyRecord = [
   { rank: 1, name: "Tobi", time: "0:0:15", date: "2022-06-09" },
   { rank: 2, name: "Dav", time: "0:0:20", date: "2022-05-21" },
@@ -219,6 +235,7 @@ function App() {
           });
 
           if (stoppedTime < lastLeaderboardTime || dummyRecord.length < 10) {
+            document.getElementById("congrats-modal").style.display = "block";
             let editLearderboard = true;
             const newRecord = {
               name: "New Name",
