@@ -15,6 +15,8 @@ import {
   getFirestore,
   collection,
   addDoc,
+  getDocs,
+  deleteDoc,
   query,
   orderBy,
   limit,
@@ -31,18 +33,7 @@ let clickedContextMenuItem = null;
 let totalItems = itemsToFind.length;
 
 const app = initializeApp(firebaseConfig);
-const dummyRecord = [
-  { rank: 1, name: "Tobi", time: "0:0:15", date: "2022-06-09" },
-  { rank: 2, name: "Dav", time: "0:0:20", date: "2022-05-21" },
-  { rank: 3, name: "Mary", time: "0:0:25", date: "2021-03-17" },
-  { rank: 4, name: "Jerry", time: "0:0:30", date: "2022-01-01" },
-  { rank: 5, name: "Abel", time: "0:0:35", date: "2020-10-10" },
-  { rank: 6, name: "Sarah", time: "0:0:40", date: "2020-10-10" },
-  { rank: 7, name: "Mary", time: "0:0:45", date: "2021-03-17" },
-  { rank: 8, name: "Jerry", time: "0:0:50", date: "2022-01-01" },
-  { rank: 9, name: "Abel", time: "0:0:55", date: "2020-10-10" },
-  { rank: 10, name: "Sarah", time: "0:1:0", date: "2020-10-10" },
-];
+const db = getFirestore(app);
 
 function App() {
   const [clickedMenuItemInfo, setClickedMenuItemInfo] = useState({
@@ -114,7 +105,7 @@ function App() {
     return { contextMenuLeftPosition, contextMenuTopPosition };
   }
 
-  function handleMouseDown(e) {
+  async function handleMouseDown(e) {
     let isContextMenuItem = false;
     const contextMenu = document.getElementById("context-menu");
     const itemSelectionFeedback = document.getElementById(
@@ -222,22 +213,41 @@ function App() {
 
         if (totalItems === 0) {
           pause();
+          let topTenPlayers = [];
+          let lastTopTenPlayer = null;
+          let lastLeaderboardTime = null;
           const stoppedTime = Number(`${hours}0${minutes}0${seconds}`);
-          const lastLeaderboardTime = dummyRecord[dummyRecord.length - 1]
-            ? Number(
-                dummyRecord[dummyRecord.length - 1].time.replace(/:/g, "0")
-              )
+          const topTenPlayersCollectionRef = collection(db, "topTenPlayers");
+          const topTenPlayersCollectionQuery = query(
+            topTenPlayersCollectionRef,
+            orderBy("time"),
+            limit(10)
+          );
+          const topTenPlayersDocuments = await getDocs(
+            topTenPlayersCollectionQuery
+          );
+
+          topTenPlayersDocuments.forEach((document) => {
+            const documentDataWithID = document.data();
+            documentDataWithID.id = document.id;
+            topTenPlayers.push(documentDataWithID);
+          });
+
+          lastTopTenPlayer = topTenPlayers[topTenPlayers.length - 1];
+
+          lastLeaderboardTime = lastTopTenPlayer
+            ? Number(lastTopTenPlayer.time.replace(/:/g, "0"))
             : 0;
 
+          console.log(topTenPlayers);
           console.log({
             stoppedTime: stoppedTime,
             lastLeaderboardTime: lastLeaderboardTime,
           });
 
-          if (stoppedTime < lastLeaderboardTime || dummyRecord.length < 10) {
-            document.getElementById("congrats-modal").style.display = "block";
-            let editLearderboard = true;
-            const newRecord = {
+          if (stoppedTime < lastLeaderboardTime || topTenPlayers.length < 10) {
+            // document.getElementById("congrats-modal").style.display = "block";
+            const newTopTenPlayer = {
               name: "New Name",
               time: `${hours}:${minutes}:${seconds}`,
               date: new Date().toLocaleDateString(undefined, {
@@ -248,57 +258,22 @@ function App() {
               }),
             };
 
-            if (dummyRecord.length === 0) {
-              dummyRecord.push(newRecord);
-              editLearderboard = false;
-              console.log(dummyRecord);
+            // Add the new top 10 player to the Firestore database:
+            async function saveNewTopTenPlayerInfo(newTopTenPlayer) {
+              try {
+                await addDoc(topTenPlayersCollectionRef, newTopTenPlayer);
+              } catch (error) {
+                console.error("Error writing new data to Database", error);
+              }
             }
 
-            for (let i = 0; i < dummyRecord.length; i++) {
-              if (editLearderboard) {
-                console.log({ endTime: `${hours}${minutes}${seconds}` });
-                console.log({
-                  [dummyRecord[i].name]: dummyRecord[i].time.replace(/:/g, "0"),
-                });
+            if (topTenPlayers.length < 10) {
+              saveNewTopTenPlayerInfo(newTopTenPlayer);
+            }
 
-                if (
-                  stoppedTime < Number(dummyRecord[i].time.replace(/:/g, "0"))
-                ) {
-                  if (i === 0 && dummyRecord.length < 10) {
-                    dummyRecord.unshift(newRecord);
-                    console.log(dummyRecord);
-                  } else if (i === 0 && dummyRecord.length === 10) {
-                    dummyRecord.unshift(newRecord);
-                    dummyRecord.pop();
-                    console.log(dummyRecord);
-                  } else if (i < 9 && dummyRecord.length < 10) {
-                    dummyRecord.splice(i, 0, newRecord);
-                    console.log(dummyRecord);
-                  } else if (i < 9 && dummyRecord.length === 10) {
-                    dummyRecord.splice(i, 0, newRecord);
-                    dummyRecord.pop();
-                    console.log(dummyRecord);
-                  } else if (i === 9) {
-                    dummyRecord.splice(i, 1, newRecord);
-                    console.log(dummyRecord);
-                  } else {
-                    console.error({
-                      currentLoop: i,
-                      leaderBoardlength: dummyRecord.length,
-                    });
-                  }
-                  editLearderboard = false;
-                } else if (
-                  i === dummyRecord.length - 1 &&
-                  stoppedTime >= Number(dummyRecord[i].time.replace(/:/g, "0"))
-                ) {
-                  // If the loop is at the last record in the leaderboard and the user's time is equal
-                  // to or greater than the record, add the user's time to the end of the leaderboard:
-                  dummyRecord.push(newRecord);
-                  editLearderboard = false;
-                  console.log(dummyRecord);
-                }
-              }
+            if (topTenPlayers.length === 10) {
+              await deleteDoc(doc(db, "topTenPlayers", lastTopTenPlayer.id));
+              saveNewTopTenPlayerInfo(newTopTenPlayer);
             }
           }
           console.log(`All items found in ${hours}:${minutes}:${seconds}`);
