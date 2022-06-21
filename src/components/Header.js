@@ -21,8 +21,9 @@ function Header(props) {
       <span id="logo-span">Find →</span>
       <span id="header-images-span">{searchItemsImages}</span>
       <span id="timer-span">
-        <span>{props.hours}</span>:<span>{props.minutes}</span>:
-        <span>{props.seconds}</span>
+        <span id="timer-hours">{props.hours}</span>:
+        <span id="timer-minutes">{props.minutes}</span>:
+        <span id="timer-seconds">{props.seconds}</span>
       </span>
     </header>
   );

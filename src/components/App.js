@@ -14,17 +14,10 @@ import "../styles/Apps.css";
 import {
   getFirestore,
   collection,
-  addDoc,
   getDocs,
-  deleteDoc,
   query,
   orderBy,
   limit,
-  onSnapshot,
-  setDoc,
-  updateDoc,
-  doc,
-  serverTimestamp,
 } from "firebase/firestore";
 
 let previousTimeout = null;
@@ -216,6 +209,7 @@ function App() {
           let topTenPlayers = [];
           let lastTopTenPlayer = null;
           let lastLeaderboardTime = null;
+
           const stoppedTime = Number(`${hours}0${minutes}0${seconds}`);
           const topTenPlayersCollectionRef = collection(db, "topTenPlayers");
           const topTenPlayersCollectionQuery = query(
@@ -246,37 +240,8 @@ function App() {
           });
 
           if (stoppedTime < lastLeaderboardTime || topTenPlayers.length < 10) {
-            // document.getElementById("congrats-modal").style.display = "block";
-            const newTopTenPlayer = {
-              name: "New Name",
-              time: `${hours}:${minutes}:${seconds}`,
-              date: new Date().toLocaleDateString(undefined, {
-                weekday: "long",
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              }),
-            };
-
-            // Add the new top 10 player to the Firestore database:
-            async function saveNewTopTenPlayerInfo(newTopTenPlayer) {
-              try {
-                await addDoc(topTenPlayersCollectionRef, newTopTenPlayer);
-              } catch (error) {
-                console.error("Error writing new data to Database", error);
-              }
-            }
-
-            if (topTenPlayers.length < 10) {
-              saveNewTopTenPlayerInfo(newTopTenPlayer);
-            }
-
-            if (topTenPlayers.length === 10) {
-              await deleteDoc(doc(db, "topTenPlayers", lastTopTenPlayer.id));
-              saveNewTopTenPlayerInfo(newTopTenPlayer);
-            }
+            document.getElementById("congrats-modal").style.display = "block";
           }
-          console.log(`All items found in ${hours}:${minutes}:${seconds}`);
         }
       } else {
         clearTimeout(previousTimeout);
