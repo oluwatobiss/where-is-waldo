@@ -1,4 +1,5 @@
 import { useState } from "react";
+import uniqid from "uniqid";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../firebase-config";
 import "../styles/CongratsModal.css";
@@ -28,6 +29,7 @@ function CongratsModal() {
     if (name) {
       let topTenPlayers = [];
       let lastTopTenPlayer = null;
+      let topTenPlayersDocuments = null;
 
       const timerHours = document.getElementById("timer-hours").innerText;
       const timerMinutes = document.getElementById("timer-minutes").innerText;
@@ -40,9 +42,7 @@ function CongratsModal() {
         limit(10)
       );
 
-      const topTenPlayersDocuments = await getDocs(
-        topTenPlayersCollectionQuery
-      );
+      topTenPlayersDocuments = await getDocs(topTenPlayersCollectionQuery);
       const newTopTenPlayer = {
         name: name,
         time: `${timerHours}:${timerMinutes}:${timerSeconds}`,
@@ -66,8 +66,121 @@ function CongratsModal() {
 
       // Add the new top 10 player to the Firestore database:
       async function saveNewTopTenPlayerInfo(newTopTenPlayer) {
+        const newTopTenPlayers = [];
+        const leaderboardTableBody = document.getElementById(
+          "leaderboard-table-body"
+        );
+
         try {
           await addDoc(topTenPlayersCollectionRef, newTopTenPlayer);
+          topTenPlayersDocuments = await getDocs(topTenPlayersCollectionQuery);
+
+          topTenPlayersDocuments.forEach((document) => {
+            newTopTenPlayers.push(document.data());
+          });
+
+          const tableRowElements = newTopTenPlayers.map(createTableRowElements);
+          console.log(tableRowElements);
+
+          tableRowElements.forEach((i) => leaderboardTableBody.append(i));
+
+          function createTableRowElements(doc, ind) {
+            if (ind === 0) {
+              const tr = document.createElement("tr");
+              tr.setAttribute("key", uniqid());
+
+              const rankTD = document.createElement("td");
+              const positionSpan = document.createElement("span");
+              const medalSpan = document.createElement("span");
+
+              positionSpan.append("#1");
+              medalSpan.append("🥇🏆");
+              rankTD.append(positionSpan, medalSpan);
+
+              const nameTD = document.createElement("td");
+              nameTD.append(doc.name);
+
+              const timeTD = document.createElement("td");
+              timeTD.append(doc.time);
+
+              const dateTD = document.createElement("td");
+              dateTD.append(doc.date);
+
+              tr.append(rankTD, nameTD, timeTD, dateTD);
+              return tr;
+            }
+
+            if (ind === 1) {
+              const tr = document.createElement("tr");
+              tr.setAttribute("key", uniqid());
+
+              const rankTD = document.createElement("td");
+              const positionSpan = document.createElement("span");
+              const medalSpan = document.createElement("span");
+
+              positionSpan.append("#2");
+              medalSpan.append("🥈");
+              rankTD.append(positionSpan, medalSpan);
+
+              const nameTD = document.createElement("td");
+              nameTD.append(doc.name);
+
+              const timeTD = document.createElement("td");
+              timeTD.append(doc.time);
+
+              const dateTD = document.createElement("td");
+              dateTD.append(doc.date);
+
+              tr.append(rankTD, nameTD, timeTD, dateTD);
+              return tr;
+            }
+
+            if (ind === 2) {
+              const tr = document.createElement("tr");
+              tr.setAttribute("key", uniqid());
+
+              const rankTD = document.createElement("td");
+              const positionSpan = document.createElement("span");
+              const medalSpan = document.createElement("span");
+
+              positionSpan.append("#3");
+              medalSpan.append("🥉");
+              rankTD.append(positionSpan, medalSpan);
+
+              const nameTD = document.createElement("td");
+              nameTD.append(doc.name);
+
+              const timeTD = document.createElement("td");
+              timeTD.append(doc.time);
+
+              const dateTD = document.createElement("td");
+              dateTD.append(doc.date);
+
+              tr.append(rankTD, nameTD, timeTD, dateTD);
+              return tr;
+            }
+
+            if (ind >= 3) {
+              const tr = document.createElement("tr");
+              tr.setAttribute("key", uniqid());
+
+              const rankTD = document.createElement("td");
+              rankTD.append(`#${ind + 1}`);
+
+              const nameTD = document.createElement("td");
+              nameTD.append(doc.name);
+
+              const timeTD = document.createElement("td");
+              timeTD.append(doc.time);
+
+              const dateTD = document.createElement("td");
+              dateTD.append(doc.date);
+
+              tr.append(rankTD, nameTD, timeTD, dateTD);
+              return tr;
+            }
+          }
+
           document.getElementById("leaderboard-modal").style.display = "block";
         } catch (error) {
           console.error("Error writing new data to Database", error);
