@@ -68,6 +68,7 @@ function CongratsModal() {
       async function saveNewTopTenPlayerInfo(newTopTenPlayer) {
         try {
           await addDoc(topTenPlayersCollectionRef, newTopTenPlayer);
+          document.getElementById("leaderboard-modal").style.display = "block";
         } catch (error) {
           console.error("Error writing new data to Database", error);
         }

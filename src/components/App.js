@@ -34,7 +34,7 @@ function App() {
     clickedContextMenuItem: null,
   });
 
-  const { seconds, minutes, hours, start, pause, reset } = useStopwatch({
+  const { seconds, minutes, hours, pause } = useStopwatch({
     autoStart: true,
   });
 
@@ -231,9 +231,7 @@ function App() {
           );
 
           topTenPlayersDocuments.forEach((document) => {
-            const documentDataWithID = document.data();
-            documentDataWithID.id = document.id;
-            topTenPlayers.push(documentDataWithID);
+            topTenPlayers.push(document.data());
           });
 
           lastTopTenPlayer = topTenPlayers[topTenPlayers.length - 1];
