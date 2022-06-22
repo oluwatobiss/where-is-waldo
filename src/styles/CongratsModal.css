@@ -51,3 +51,8 @@ h1 {
 #congrats-form input:focus {
   outline: none;
 }
+
+#submit-note {
+  padding-top: 5px;
+  font-size: 0.9rem;
+}

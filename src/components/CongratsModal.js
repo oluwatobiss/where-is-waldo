@@ -21,63 +21,69 @@ function CongratsModal() {
   const [name, setName] = useState("");
 
   async function handleSubmit(e) {
+    document.getElementById("congrats-modal").style.display = "none";
     e.preventDefault();
-
-    let topTenPlayers = [];
-    let lastTopTenPlayer = null;
-
-    const timerHours = document.getElementById("timer-hours").innerText;
-    const timerMinutes = document.getElementById("timer-minutes").innerText;
-    const timerSeconds = document.getElementById("timer-seconds").innerText;
-
-    const topTenPlayersCollectionRef = collection(db, "topTenPlayers");
-    const topTenPlayersCollectionQuery = query(
-      topTenPlayersCollectionRef,
-      orderBy("time"),
-      limit(10)
-    );
-
-    const topTenPlayersDocuments = await getDocs(topTenPlayersCollectionQuery);
-    const newTopTenPlayer = {
-      name: name,
-      time: `${timerHours}:${timerMinutes}:${timerSeconds}`,
-      date: new Date().toLocaleDateString(undefined, {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }),
-    };
-
-    console.log(newTopTenPlayer);
-
-    topTenPlayersDocuments.forEach((document) => {
-      const documentDataWithID = document.data();
-      documentDataWithID.id = document.id;
-      topTenPlayers.push(documentDataWithID);
-    });
-
-    lastTopTenPlayer = topTenPlayers[topTenPlayers.length - 1];
-
-    // Add the new top 10 player to the Firestore database:
-    async function saveNewTopTenPlayerInfo(newTopTenPlayer) {
-      try {
-        await addDoc(topTenPlayersCollectionRef, newTopTenPlayer);
-      } catch (error) {
-        console.error("Error writing new data to Database", error);
-      }
-    }
-
-    if (topTenPlayers.length < 10) {
-      saveNewTopTenPlayerInfo(newTopTenPlayer);
-    }
-
-    if (topTenPlayers.length === 10) {
-      await deleteDoc(doc(db, "topTenPlayers", lastTopTenPlayer.id));
-      saveNewTopTenPlayerInfo(newTopTenPlayer);
-    }
-
     setName("");
+
+    if (name) {
+      let topTenPlayers = [];
+      let lastTopTenPlayer = null;
+
+      const timerHours = document.getElementById("timer-hours").innerText;
+      const timerMinutes = document.getElementById("timer-minutes").innerText;
+      const timerSeconds = document.getElementById("timer-seconds").innerText;
+
+      const topTenPlayersCollectionRef = collection(db, "topTenPlayers");
+      const topTenPlayersCollectionQuery = query(
+        topTenPlayersCollectionRef,
+        orderBy("time"),
+        limit(10)
+      );
+
+      const topTenPlayersDocuments = await getDocs(
+        topTenPlayersCollectionQuery
+      );
+      const newTopTenPlayer = {
+        name: name,
+        time: `${timerHours}:${timerMinutes}:${timerSeconds}`,
+        date: new Date().toLocaleDateString(undefined, {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }),
+      };
+
+      console.log(newTopTenPlayer);
+
+      topTenPlayersDocuments.forEach((document) => {
+        const documentDataWithID = document.data();
+        documentDataWithID.id = document.id;
+        topTenPlayers.push(documentDataWithID);
+      });
+
+      lastTopTenPlayer = topTenPlayers[topTenPlayers.length - 1];
+
+      // Add the new top 10 player to the Firestore database:
+      async function saveNewTopTenPlayerInfo(newTopTenPlayer) {
+        try {
+          await addDoc(topTenPlayersCollectionRef, newTopTenPlayer);
+        } catch (error) {
+          console.error("Error writing new data to Database", error);
+        }
+      }
+
+      if (topTenPlayers.length < 10) {
+        saveNewTopTenPlayerInfo(newTopTenPlayer);
+      }
+
+      if (topTenPlayers.length === 10) {
+        await deleteDoc(doc(db, "topTenPlayers", lastTopTenPlayer.id));
+        saveNewTopTenPlayerInfo(newTopTenPlayer);
+      }
+    } else {
+      window.location.reload();
+    }
   }
 
   function handleChange(e) {
@@ -98,6 +104,7 @@ function CongratsModal() {
           value={name}
           onChange={handleChange}
         />
+        <p id="submit-note">(Press the Enter key to submit)</p>
       </form>
     </div>
   );

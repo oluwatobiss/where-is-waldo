@@ -38,6 +38,15 @@ function App() {
     autoStart: true,
   });
 
+  function closeModalBox(e) {
+    const congratsModalBg = document.getElementById("congrats-modal");
+    const closeCongratsFormBtn = document.getElementById("close-congrats-form");
+
+    if (e.target === congratsModalBg || e.target === closeCongratsFormBtn) {
+      congratsModalBg.style.display = "none";
+    }
+  }
+
   function handleKeydown(e) {
     const contextMenu = document.getElementById("context-menu");
     const contextMenuIsActive = [...contextMenu.classList].includes("visible");
@@ -301,9 +310,11 @@ function App() {
   }
 
   useEffect(() => {
+    document.addEventListener("click", closeModalBox);
     document.addEventListener("keydown", handleKeydown);
 
     return () => {
+      document.removeEventListener("click", closeModalBox);
       document.removeEventListener("keydown", handleKeydown);
     };
   }, []);
