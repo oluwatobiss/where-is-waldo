@@ -27,7 +27,6 @@ function CongratsModal() {
     setName("");
 
     if (name) {
-      let topTenPlayers = [];
       let lastTopTenPlayer = null;
       let topTenPlayersDocuments = null;
 
@@ -35,6 +34,7 @@ function CongratsModal() {
       const timerMinutes = document.getElementById("timer-minutes").innerText;
       const timerSeconds = document.getElementById("timer-seconds").innerText;
 
+      const topTenPlayers = [];
       const topTenPlayersCollectionRef = collection(db, "topTenPlayers");
       const topTenPlayersCollectionQuery = query(
         topTenPlayersCollectionRef,
@@ -73,122 +73,122 @@ function CongratsModal() {
 
         try {
           await addDoc(topTenPlayersCollectionRef, newTopTenPlayer);
-          topTenPlayersDocuments = await getDocs(topTenPlayersCollectionQuery);
-
-          topTenPlayersDocuments.forEach((document) => {
-            newTopTenPlayers.push(document.data());
-          });
-
-          const tableRowElements = newTopTenPlayers.map(createTableRowElements);
-          console.log(tableRowElements);
-
-          tableRowElements.forEach((i) => leaderboardTableBody.append(i));
-
-          function createTableRowElements(doc, ind) {
-            if (ind === 0) {
-              const tr = document.createElement("tr");
-              tr.setAttribute("key", uniqid());
-
-              const rankTD = document.createElement("td");
-              const positionSpan = document.createElement("span");
-              const medalSpan = document.createElement("span");
-
-              positionSpan.append("#1");
-              medalSpan.append("🥇🏆");
-              rankTD.append(positionSpan, medalSpan);
-
-              const nameTD = document.createElement("td");
-              nameTD.classList.add("name-td");
-              nameTD.append(doc.name);
-
-              const timeTD = document.createElement("td");
-              timeTD.append(doc.time);
-
-              const dateTD = document.createElement("td");
-              dateTD.append(doc.date);
-
-              tr.append(rankTD, nameTD, timeTD, dateTD);
-              return tr;
-            }
-
-            if (ind === 1) {
-              const tr = document.createElement("tr");
-              tr.setAttribute("key", uniqid());
-
-              const rankTD = document.createElement("td");
-              const positionSpan = document.createElement("span");
-              const medalSpan = document.createElement("span");
-
-              positionSpan.append("#2");
-              medalSpan.append("🥈");
-              rankTD.append(positionSpan, medalSpan);
-
-              const nameTD = document.createElement("td");
-              nameTD.classList.add("name-td");
-              nameTD.append(doc.name);
-
-              const timeTD = document.createElement("td");
-              timeTD.append(doc.time);
-
-              const dateTD = document.createElement("td");
-              dateTD.append(doc.date);
-
-              tr.append(rankTD, nameTD, timeTD, dateTD);
-              return tr;
-            }
-
-            if (ind === 2) {
-              const tr = document.createElement("tr");
-              tr.setAttribute("key", uniqid());
-
-              const rankTD = document.createElement("td");
-              const positionSpan = document.createElement("span");
-              const medalSpan = document.createElement("span");
-
-              positionSpan.append("#3");
-              medalSpan.append("🥉");
-              rankTD.append(positionSpan, medalSpan);
-
-              const nameTD = document.createElement("td");
-              nameTD.classList.add("name-td");
-              nameTD.append(doc.name);
-
-              const timeTD = document.createElement("td");
-              timeTD.append(doc.time);
-
-              const dateTD = document.createElement("td");
-              dateTD.append(doc.date);
-
-              tr.append(rankTD, nameTD, timeTD, dateTD);
-              return tr;
-            }
-
-            if (ind >= 3) {
-              const tr = document.createElement("tr");
-              tr.setAttribute("key", uniqid());
-
-              const rankTD = document.createElement("td");
-              rankTD.append(`#${ind + 1}`);
-
-              const nameTD = document.createElement("td");
-              nameTD.classList.add("name-td");
-              nameTD.append(doc.name);
-
-              const timeTD = document.createElement("td");
-              timeTD.append(doc.time);
-
-              const dateTD = document.createElement("td");
-              dateTD.append(doc.date);
-
-              tr.append(rankTD, nameTD, timeTD, dateTD);
-              return tr;
-            }
-          }
-
-          document.getElementById("leaderboard-modal").style.display = "block";
         } catch (error) {
           console.error("Error writing new data to Database", error);
         }
+
+        topTenPlayersDocuments = await getDocs(topTenPlayersCollectionQuery);
+        topTenPlayersDocuments.forEach((document) => {
+          newTopTenPlayers.push(document.data());
+        });
+
+        const tableRowElements = newTopTenPlayers.map(createTableRowElements);
+        console.log(tableRowElements);
+
+        tableRowElements.forEach((i) => leaderboardTableBody.append(i));
+
+        function createTableRowElements(doc, ind) {
+          if (ind === 0) {
+            const tr = document.createElement("tr");
+            tr.setAttribute("key", uniqid());
+
+            const rankTD = document.createElement("td");
+            const positionSpan = document.createElement("span");
+            const medalSpan = document.createElement("span");
+
+            positionSpan.append("#1");
+            medalSpan.append("🥇🏆");
+            rankTD.append(positionSpan, medalSpan);
+
+            const nameTD = document.createElement("td");
+            nameTD.classList.add("name-td");
+            nameTD.append(doc.name);
+
+            const timeTD = document.createElement("td");
+            timeTD.append(doc.time);
+
+            const dateTD = document.createElement("td");
+            dateTD.append(doc.date);
+
+            tr.append(rankTD, nameTD, timeTD, dateTD);
+            return tr;
+          }
+
+          if (ind === 1) {
+            const tr = document.createElement("tr");
+            tr.setAttribute("key", uniqid());
+
+            const rankTD = document.createElement("td");
+            const positionSpan = document.createElement("span");
+            const medalSpan = document.createElement("span");
+
+            positionSpan.append("#2");
+            medalSpan.append("🥈");
+            rankTD.append(positionSpan, medalSpan);
+
+            const nameTD = document.createElement("td");
+            nameTD.classList.add("name-td");
+            nameTD.append(doc.name);
+
+            const timeTD = document.createElement("td");
+            timeTD.append(doc.time);
+
+            const dateTD = document.createElement("td");
+            dateTD.append(doc.date);
+
+            tr.append(rankTD, nameTD, timeTD, dateTD);
+            return tr;
+          }
+
+          if (ind === 2) {
+            const tr = document.createElement("tr");
+            tr.setAttribute("key", uniqid());
+
+            const rankTD = document.createElement("td");
+            const positionSpan = document.createElement("span");
+            const medalSpan = document.createElement("span");
+
+            positionSpan.append("#3");
+            medalSpan.append("🥉");
+            rankTD.append(positionSpan, medalSpan);
+
+            const nameTD = document.createElement("td");
+            nameTD.classList.add("name-td");
+            nameTD.append(doc.name);
+
+            const timeTD = document.createElement("td");
+            timeTD.append(doc.time);
+
+            const dateTD = document.createElement("td");
+            dateTD.append(doc.date);
+
+            tr.append(rankTD, nameTD, timeTD, dateTD);
+            return tr;
+          }
+
+          if (ind >= 3) {
+            const tr = document.createElement("tr");
+            tr.setAttribute("key", uniqid());
+
+            const rankTD = document.createElement("td");
+            rankTD.append(`#${ind + 1}`);
+
+            const nameTD = document.createElement("td");
+            nameTD.classList.add("name-td");
+            nameTD.append(doc.name);
+
+            const timeTD = document.createElement("td");
+            timeTD.append(doc.time);
+
+            const dateTD = document.createElement("td");
+            dateTD.append(doc.date);
+
+            tr.append(rankTD, nameTD, timeTD, dateTD);
+            return tr;
+          }
+        }
+
+        document.getElementById("leaderboard-modal").style.display = "block";
       }
 
       if (topTenPlayers.length < 10) {

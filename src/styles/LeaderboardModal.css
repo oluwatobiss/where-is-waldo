@@ -9,8 +9,6 @@
   color: #eee;
   text-align: center;
   display: none;
-  /* transform: scale(0);
-      transform-origin: top left; */
 }
 
 #leaderboard-modal-content {
@@ -19,7 +17,7 @@
   padding: 20px;
   border: 1px solid #888;
   width: 40%;
-  /* overflow: auto; */
+  overflow: auto;
 }
 
 #close-leaderboard-modal {
