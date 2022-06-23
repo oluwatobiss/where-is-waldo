@@ -1,4 +1,4 @@
-function indicateItemAsFound(clickedContextMenuItem) {
+function markItemAsFound(clickedContextMenuItem) {
   switch (clickedContextMenuItem) {
     case "Carrot":
       document.getElementById("carrot-found").classList.add("visible");
@@ -49,4 +49,4 @@ function indicateItemAsFound(clickedContextMenuItem) {
   }
 }
 
-export default indicateItemAsFound;
+export default markItemAsFound;
