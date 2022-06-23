@@ -3,6 +3,7 @@ import { useStopwatch } from "react-timer-hook";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../firebase-config";
 import itemsToFind from "../itemsToFind";
+import indicateItemAsFound from "../indicateItemAsFound";
 import ItemSelectionFeedback from "./ItemSelectionFeedback";
 import LeaderboardModal from "./LeaderboardModal";
 import CongratsModal from "./CongratsModal";
@@ -129,6 +130,7 @@ function App() {
     const contextMenuIsActive = [...contextMenu.classList].includes("visible");
     const isLeftMouseDown = e.button === 0;
     const isContextMenu = e.target.getAttribute("id") === "context-menu";
+    const isClickableContextMenuItem = e.target.closest(".clickable-context");
     const isSearchAndFindImage = [...e.target.classList].includes(
       "search-and-find-image"
     );
@@ -139,17 +141,17 @@ function App() {
       console.log(clickedBodyItemName);
     }
 
-    if (e.target.closest(".clickable-context")) {
-      isContextMenuItem = [
-        ...e.target.closest(".clickable-context").classList,
-      ].includes("context-menu-item");
+    if (isClickableContextMenuItem) {
+      isContextMenuItem = [...isClickableContextMenuItem.classList].includes(
+        "context-menu-item"
+      );
     }
 
     if (isContextMenuItem) {
       console.log(clickedBodyItemName);
-      clickedContextMenuItem = e.target
-        .closest(".clickable-context")
-        .getAttribute("data-menu-item-name");
+      clickedContextMenuItem = isClickableContextMenuItem.getAttribute(
+        "data-menu-item-name"
+      );
 
       console.log(clickedContextMenuItem);
 
@@ -167,64 +169,7 @@ function App() {
           itemSelectionFeedback.classList.remove("visible");
         }, 5000);
 
-        switch (clickedContextMenuItem) {
-          case "Carrot":
-            document.getElementById("carrot-found").classList.add("visible");
-            document.getElementById("header-carrot").classList.add("invisible");
-            document
-              .getElementById("context-menu-carrot")
-              .classList.add("invisible");
-            break;
-          case "Pack of fries":
-            document
-              .getElementById("pack-of-fries-found")
-              .classList.add("visible");
-            document
-              .getElementById("header-pack-of-fries")
-              .classList.add("invisible");
-            document
-              .getElementById("context-menu-pack-of-fries")
-              .classList.add("invisible");
-            break;
-          case "Hamburger":
-            document.getElementById("hamburger-found").classList.add("visible");
-            document
-              .getElementById("context-menu-hamburger")
-              .classList.add("invisible");
-            document
-              .getElementById("header-hamburger")
-              .classList.add("invisible");
-            break;
-          case "American football":
-            document
-              .getElementById("american-football-found")
-              .classList.add("visible");
-            document
-              .getElementById("header-american-football")
-              .classList.add("invisible");
-            document
-              .getElementById("context-menu-american-football")
-              .classList.add("invisible");
-            break;
-          case "Pizza":
-            document.getElementById("pizza-found").classList.add("visible");
-            document.getElementById("header-pizza").classList.add("invisible");
-            document
-              .getElementById("context-menu-pizza")
-              .classList.add("invisible");
-            break;
-          case "Pineapple":
-            document.getElementById("pineapple-found").classList.add("visible");
-            document
-              .getElementById("header-pineapple")
-              .classList.add("invisible");
-            document
-              .getElementById("context-menu-pineapple")
-              .classList.add("invisible");
-            break;
-          default:
-            console.error("Selected context item not marked in SVG.");
-        }
+        indicateItemAsFound(clickedContextMenuItem);
 
         if (totalItems === 0) {
           pause();
