@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useStopwatch } from "react-timer-hook";
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../firebase-config";
 import itemsToFind from "../itemsToFind";
 import indicateItemAsFound from "../indicateItemAsFound";
+import checkIfPlayerMadeTopTen from "../checkIfPlayerMadeTopTen";
 import ItemSelectionFeedback from "./ItemSelectionFeedback";
 import LeaderboardModal from "./LeaderboardModal";
 import CongratsModal from "./CongratsModal";
@@ -12,22 +11,11 @@ import Header from "./Header";
 import Body from "./Body";
 import Footer from "./Footer";
 import "../styles/Apps.css";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  orderBy,
-  limit,
-} from "firebase/firestore";
 
 let previousTimeout = null;
 let clickedBodyItemName = null;
 let clickedContextMenuItem = null;
 let totalItems = itemsToFind.length;
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 function App() {
   const [clickedMenuItemInfo, setClickedMenuItemInfo] = useState({
@@ -121,7 +109,7 @@ function App() {
     return { contextMenuLeftPosition, contextMenuTopPosition };
   }
 
-  async function handleMouseDown(e) {
+  function handleMouseDown(e) {
     let isContextMenuItem = false;
     const contextMenu = document.getElementById("context-menu");
     const itemSelectionFeedback = document.getElementById(
@@ -173,42 +161,8 @@ function App() {
 
         if (totalItems === 0) {
           pause();
-          let topTenPlayers = [];
-          let lastTopTenPlayer = null;
-          let lastLeaderboardTime = null;
-
           const stoppedTime = Number(`${hours}0${minutes}0${seconds}`);
-          const topTenPlayersCollectionRef = collection(db, "topTenPlayers");
-          const topTenPlayersCollectionQuery = query(
-            topTenPlayersCollectionRef,
-            orderBy("time"),
-            limit(10)
-          );
-          const topTenPlayersDocuments = await getDocs(
-            topTenPlayersCollectionQuery
-          );
-
-          topTenPlayersDocuments.forEach((document) => {
-            topTenPlayers.push(document.data());
-          });
-
-          lastTopTenPlayer = topTenPlayers[topTenPlayers.length - 1];
-
-          lastLeaderboardTime = lastTopTenPlayer
-            ? Number(lastTopTenPlayer.time.replace(/:/g, "0"))
-            : 0;
-
-          console.log(topTenPlayers);
-          console.log({
-            stoppedTime: stoppedTime,
-            lastLeaderboardTime: lastLeaderboardTime,
-          });
-
-          if (stoppedTime < lastLeaderboardTime || topTenPlayers.length < 10) {
-            document.getElementById("congrats-modal").style.display = "block";
-          } else {
-            document.getElementById("oops-modal").style.display = "block";
-          }
+          checkIfPlayerMadeTopTen(stoppedTime);
         }
       } else {
         clearTimeout(previousTimeout);
