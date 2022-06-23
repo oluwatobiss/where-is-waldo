@@ -73,21 +73,7 @@ function App() {
       "search-and-find-image"
     );
 
-    if (isSearchAndFindImage) {
-      clickedBodyItemName = e.target.getAttribute("data-item-name");
-    }
-
-    if (isClickableContextMenuItem) {
-      isContextMenuItem = [...isClickableContextMenuItem.classList].includes(
-        "context-menu-item"
-      );
-    }
-
-    if (isContextMenuItem) {
-      clickedContextMenuItem = isClickableContextMenuItem.getAttribute(
-        "data-menu-item-name"
-      );
-
+    function checkIfPlayerFoundAnItem() {
       if (clickedContextMenuItem === clickedBodyItemName) {
         markItemAsFound(clickedContextMenuItem);
         clearTimeout(previousTimeout);
@@ -105,6 +91,7 @@ function App() {
 
         if (totalItems === 0) {
           pause();
+          contextMenu.classList.remove("visible");
           const stoppedTime = Number(`${hours}0${minutes}0${seconds}`);
           checkIfPlayerMadeTopTen(stoppedTime);
         }
@@ -126,14 +113,32 @@ function App() {
       }
     }
 
+    if (isSearchAndFindImage) {
+      clickedBodyItemName = e.target.getAttribute("data-item-name");
+    }
+
+    if (isClickableContextMenuItem) {
+      isContextMenuItem = [...isClickableContextMenuItem.classList].includes(
+        "context-menu-item"
+      );
+    }
+
+    if (isContextMenuItem) {
+      clickedContextMenuItem = isClickableContextMenuItem.getAttribute(
+        "data-menu-item-name"
+      );
+      checkIfPlayerFoundAnItem();
+    }
+
     if (isLeftMouseDown && isSearchAndFindImage) {
       showContextMenu(e, contextMenuIsActive);
     }
 
+    // Remove context menu if user clicks on places like the header or footer:
     if (
       isLeftMouseDown &&
-      !isSearchAndFindImage &&
       contextMenuIsActive &&
+      !isSearchAndFindImage &&
       !isContextMenu
     ) {
       contextMenu.classList.remove("visible");
