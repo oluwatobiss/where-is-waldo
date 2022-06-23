@@ -23,7 +23,6 @@ function CongratsModal() {
   async function handleSubmit(e) {
     e.preventDefault();
     document.getElementById("congrats-modal").style.display = "none";
-
     if (name) {
       const timerHours = document.getElementById("timer-hours").innerText;
       const timerMinutes = document.getElementById("timer-minutes").innerText;
@@ -39,7 +38,7 @@ function CongratsModal() {
         }),
       };
 
-      const currentTopTenPlayers = [];
+      const topTenPlayers = [];
       const topTenPlayersCollectionRef = collection(db, "topTenPlayers");
       const topTenPlayersCollectionQuery = query(
         topTenPlayersCollectionRef,
@@ -47,34 +46,26 @@ function CongratsModal() {
         limit(10)
       );
 
-      const currentTopTenPlayersDocs = await getDocs(
-        topTenPlayersCollectionQuery
-      );
-
-      currentTopTenPlayersDocs.forEach((document) => {
+      const topTenPlayersDocs = await getDocs(topTenPlayersCollectionQuery);
+      topTenPlayersDocs.forEach((document) => {
         const documentDataWithID = document.data();
         documentDataWithID.id = document.id;
-        currentTopTenPlayers.push(documentDataWithID);
+        topTenPlayers.push(documentDataWithID);
       });
 
-      const tenthTopTenPlayer =
-        currentTopTenPlayers[currentTopTenPlayers.length - 1];
+      const tenthTopTenPlayer = topTenPlayers[topTenPlayers.length - 1];
 
-      if (currentTopTenPlayers.length < 10) {
+      if (topTenPlayers.length < 10) {
         saveNewTopTenPlayerInfo(newTopTenPlayer);
       }
 
-      if (currentTopTenPlayers.length === 10) {
+      if (topTenPlayers.length === 10) {
         await deleteDoc(doc(db, "topTenPlayers", tenthTopTenPlayer.id));
         saveNewTopTenPlayerInfo(newTopTenPlayer);
       }
     } else {
       window.location.reload();
     }
-  }
-
-  function handleChange(e) {
-    setName(e.target.value);
   }
 
   return (
@@ -89,7 +80,7 @@ function CongratsModal() {
           type="text"
           placeholder="Add your name to the leaderboard"
           value={name}
-          onChange={handleChange}
+          onChange={(e) => setName(e.target.value)}
         />
         <p id="submit-note">(Press the Enter key to submit)</p>
       </form>
