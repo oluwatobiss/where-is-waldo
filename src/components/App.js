@@ -41,9 +41,22 @@ function App() {
   function closeModalBox(e) {
     const congratsModalBg = document.getElementById("congrats-modal");
     const closeCongratsFormBtn = document.getElementById("close-congrats-form");
+    const oopsModalBg = document.getElementById("oops-modal");
+    const closeoopsModalBtn = document.getElementById("close-oops-modal");
+    const leaderboardModalBg = document.getElementById("leaderboard-modal");
+    const closeLeaderboardBtn = document.getElementById(
+      "close-leaderboard-modal"
+    );
 
-    if (e.target === congratsModalBg || e.target === closeCongratsFormBtn) {
-      congratsModalBg.style.display = "none";
+    if (
+      e.target === congratsModalBg ||
+      e.target === closeCongratsFormBtn ||
+      e.target === leaderboardModalBg ||
+      e.target === closeLeaderboardBtn ||
+      e.target === oopsModalBg ||
+      e.target === closeoopsModalBtn
+    ) {
+      window.location.reload();
     }
   }
 
@@ -248,6 +261,8 @@ function App() {
 
           if (stoppedTime < lastLeaderboardTime || topTenPlayers.length < 10) {
             document.getElementById("congrats-modal").style.display = "block";
+          } else {
+            document.getElementById("oops-modal").style.display = "block";
           }
         }
       } else {

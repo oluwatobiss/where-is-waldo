@@ -4,7 +4,7 @@ function LeaderboardModal() {
   return (
     <div id="leaderboard-modal">
       <div id="leaderboard-modal-content">
-        <span id="close-leaderboard-modal-span" title="Close">
+        <span id="close-leaderboard-modal" title="Close">
           ❌
         </span>
         <h1>Top 10 Leaderboard</h1>

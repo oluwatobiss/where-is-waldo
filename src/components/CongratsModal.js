@@ -98,6 +98,7 @@ function CongratsModal() {
               rankTD.append(positionSpan, medalSpan);
 
               const nameTD = document.createElement("td");
+              nameTD.classList.add("name-td");
               nameTD.append(doc.name);
 
               const timeTD = document.createElement("td");
@@ -123,6 +124,7 @@ function CongratsModal() {
               rankTD.append(positionSpan, medalSpan);
 
               const nameTD = document.createElement("td");
+              nameTD.classList.add("name-td");
               nameTD.append(doc.name);
 
               const timeTD = document.createElement("td");
@@ -148,6 +150,7 @@ function CongratsModal() {
               rankTD.append(positionSpan, medalSpan);
 
               const nameTD = document.createElement("td");
+              nameTD.classList.add("name-td");
               nameTD.append(doc.name);
 
               const timeTD = document.createElement("td");
@@ -168,6 +171,7 @@ function CongratsModal() {
               rankTD.append(`#${ind + 1}`);
 
               const nameTD = document.createElement("td");
+              nameTD.classList.add("name-td");
               nameTD.append(doc.name);
 
               const timeTD = document.createElement("td");

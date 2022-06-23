@@ -21,11 +21,7 @@ const contextMenuItems = itemsToFind.map((i) => {
 function ContextMenu() {
   return (
     <div id="context-menu">
-      <span
-        id="close-context-menu-span"
-        className="clickable-context"
-        title="Close"
-      >
+      <span id="close-context-menu" className="clickable-context" title="Close">
         ❌
       </span>
       <div id="context-menu-items-div">{contextMenuItems}</div>

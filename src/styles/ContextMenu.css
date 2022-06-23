@@ -13,7 +13,7 @@
   transition: 200ms ease-in-out;
 }
 
-#close-context-menu-span {
+#close-context-menu {
   float: right;
   padding: 7px 7px 0;
   cursor: pointer;
