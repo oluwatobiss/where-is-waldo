@@ -4,6 +4,7 @@ import itemsToFind from "../itemsToFind";
 import markItemAsFound from "../markItemAsFound";
 import checkIfPlayerMadeTopTen from "../checkIfPlayerMadeTopTen";
 import showContextMenu from "../showContextMenu";
+import Loader from "./Loader";
 import ItemSelectionFeedback from "./ItemSelectionFeedback";
 import LeaderboardModal from "./LeaderboardModal";
 import CongratsModal from "./CongratsModal";
@@ -53,7 +54,6 @@ function App() {
   function handleKeydown(e) {
     const contextMenu = document.getElementById("context-menu");
     const contextMenuIsActive = [...contextMenu.classList].includes("visible");
-
     if (e.key === "Escape" && contextMenuIsActive) {
       contextMenu.classList.remove("visible");
     }
@@ -157,6 +157,7 @@ function App() {
 
   return (
     <div className="App" onMouseDown={handleMouseDown}>
+      <Loader />
       <ItemSelectionFeedback clickedMenuItemInfo={clickedMenuItemInfo} />
       <LeaderboardModal />
       <CongratsModal />

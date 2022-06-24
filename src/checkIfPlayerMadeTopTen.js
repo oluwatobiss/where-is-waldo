@@ -22,7 +22,10 @@ async function checkIfPlayerMadeTopTen(stoppedTime) {
     orderBy("time"),
     limit(10)
   );
+
+  document.getElementById("loader-bg").style.display = "block";
   const topTenPlayersDocuments = await getDocs(topTenPlayersCollectionQuery);
+  document.getElementById("loader-bg").style.display = "none";
 
   topTenPlayersDocuments.forEach((document) => {
     topTenPlayers.push(document.data());
@@ -33,11 +36,9 @@ async function checkIfPlayerMadeTopTen(stoppedTime) {
     ? Number(lastTopTenPlayer.time.replace(/:/g, "0"))
     : 0;
 
-  if (stoppedTime < lastLeaderboardTime || topTenPlayers.length < 10) {
-    document.getElementById("congrats-modal").style.display = "block";
-  } else {
-    document.getElementById("oops-modal").style.display = "block";
-  }
+  stoppedTime < lastLeaderboardTime || topTenPlayers.length < 10
+    ? (document.getElementById("congrats-modal").style.display = "block")
+    : (document.getElementById("oops-modal").style.display = "block");
 }
 
 export default checkIfPlayerMadeTopTen;

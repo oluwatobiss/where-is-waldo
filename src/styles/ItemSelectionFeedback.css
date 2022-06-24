@@ -9,8 +9,6 @@
   text-align: center;
   font-size: 1.2rem;
   display: none;
-  /* transform: scale(0);
-      transform-origin: top left; */
 }
 
 #item-selection-feedback.visible {

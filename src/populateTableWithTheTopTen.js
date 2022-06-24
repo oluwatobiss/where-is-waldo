@@ -25,6 +25,7 @@ async function populateTableWithTheTopTen() {
     limit(10)
   );
   const topTenPlayersDocs = await getDocs(topTenPlayersCollectionQuery);
+  document.getElementById("loader-bg").style.display = "none";
   topTenPlayersDocs.forEach((document) => {
     topTenPlayers.push(document.data());
   });

@@ -4,15 +4,11 @@ import "../styles/Header.css";
 
 function Header(props) {
   useEffect(() => {
+    const reloadPage = () => window.location.reload();
     const appLogo = document.getElementById("logo-span");
-    function reloadPage() {
-      window.location.reload();
-    }
-
     appLogo.addEventListener("click", reloadPage);
     return () => appLogo.removeEventListener("click", reloadPage);
   }, []);
-
   return (
     <header>
       <span id="logo-span" title="Home">

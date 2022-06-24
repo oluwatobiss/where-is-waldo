@@ -19,7 +19,6 @@ const db = getFirestore(app);
 
 function CongratsModal() {
   const [name, setName] = useState("");
-
   async function handleSubmit(e) {
     e.preventDefault();
     document.getElementById("congrats-modal").style.display = "none";
@@ -46,6 +45,7 @@ function CongratsModal() {
         limit(10)
       );
 
+      document.getElementById("loader-bg").style.display = "block";
       const topTenPlayersDocs = await getDocs(topTenPlayersCollectionQuery);
       topTenPlayersDocs.forEach((document) => {
         const documentDataWithID = document.data();
