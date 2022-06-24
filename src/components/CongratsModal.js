@@ -1,10 +1,8 @@
 import { useState } from "react";
 import saveNewTopTenPlayerInfo from "../saveNewTopTenPlayerInfo";
 import "../styles/CongratsModal.css";
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "../firebase-config";
+import db from "../firebase-config";
 import {
-  getFirestore,
   collection,
   getDocs,
   deleteDoc,
@@ -13,9 +11,6 @@ import {
   limit,
   doc,
 } from "firebase/firestore";
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
 function CongratsModal() {
   const [name, setName] = useState("");

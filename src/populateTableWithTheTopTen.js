@@ -1,17 +1,6 @@
 import createTableRowElements from "./createTableRowElements";
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "./firebase-config";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  orderBy,
-  limit,
-} from "firebase/firestore";
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+import db from "./firebase-config";
+import { collection, getDocs, query, orderBy, limit } from "firebase/firestore";
 
 async function populateTableWithTheTopTen() {
   const leaderboardTableBody = document.getElementById(

@@ -1,10 +1,6 @@
 import populateTableWithTheTopTen from "./populateTableWithTheTopTen";
-import { initializeApp } from "firebase/app";
-import { firebaseConfig } from "./firebase-config";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+import db from "./firebase-config";
+import { collection, addDoc } from "firebase/firestore";
 
 async function saveNewTopTenPlayerInfo(newTopTenPlayer) {
   const topTenPlayersCollectionRef = collection(db, "topTenPlayers");
